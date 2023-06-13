@@ -1,0 +1,61 @@
+version: "3.2"
+services:
+  dev-core.req-srv0:
+    image: erlang:25.3-slim
+    container_name: dev-core.req-srv0
+    hostname: req-srv0-core.local
+    ports:
+      - "9100:9100"
+    stdin_open: true
+    tty: true
+    working_dir: $PWD
+    #    command: [ "/bin/bash" ]
+    command: [ "/bin/bash", "-c", "bin/up.sh" ]
+    volumes:
+      - type: bind
+        source: $PWD
+        target: $PWD
+    networks:
+      - dev-net1
+
+  dev-core.req-srv1:
+    image: erlang:25.3-slim
+    container_name: dev-core.req-srv1
+    hostname: req-srv1-core.local
+    ports:
+      - "9101:9100"
+    stdin_open: true
+    tty: true
+    working_dir: $PWD
+    command: [ "/bin/bash", "-c", "sleep 20; bin/up.sh" ]
+    depends_on:
+      - dev-core.req-srv0
+    volumes:
+      - type: bind
+        source: $PWD
+        target: $PWD
+    networks:
+      - dev-net1
+
+  dev-core.req-srv2:
+    image: erlang:25.3-slim
+    container_name: dev-core.req-srv2
+    hostname: req-srv2-core.local
+    ports:
+      - "9102:9100"
+    stdin_open: true
+    tty: true
+    working_dir: $PWD
+    command: [ "/bin/bash", "-c", "sleep 30; bin/up.sh" ]
+    depends_on:
+      - dev-core.req-srv1
+    volumes:
+      - type: bind
+        source: $PWD
+        target: $PWD
+    networks:
+      - dev-net1
+
+networks:
+  dev-net1:
+    driver: bridge

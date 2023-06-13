@@ -1,0 +1,7 @@
+*.beam
+_build
+*.iml
+.idea
+*.dump
+.DS_Store
+rebar.lock
